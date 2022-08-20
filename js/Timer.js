@@ -5,6 +5,7 @@ function showTime(){
 
  function showSessionExpire()  {
      console.log("Activity-B : Your Session expired at "+showTime());
+     
 }
 
 console.log("Activity -A : Triggering Activity-B At "+showTime());
