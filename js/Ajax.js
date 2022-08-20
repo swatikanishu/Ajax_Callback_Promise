@@ -3,13 +3,17 @@ let XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 function makeAJAXCall(methodType, url, callback, async = true, data = null) {
     let xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200 || xhr.status === 201) {
-                callback(xhr.responseText);
-            } else if (xhr.status >= 400) {
-                console.log("Handle 400 Client Error or 500 Server Error");
-            }
-        }
+       console.log("State Changed Called. Ready State: " + xhr.readyState
+       + "Status: " + xhr.status);
+       if(xhr.status.toString().match('^[2][0-9]{2}$')) {
+           console.log(xhr.responseText);
+       }else if(xhr.status.toString().match('^[4,5][0-9]{2}$')){
+           reject({
+               status: xhr.status,
+               statusText: xhr.statusText
+           });
+           console.log("XHR Failed");
+       }
     }
     xhr.open(methodType, url, async);
     if (data) {
@@ -26,7 +30,7 @@ function getUserDetails(data) {
 }
 makeAJAXCall("GET", getURL, getUserDetails);
 
-const deleteURL = "http://localhost:3000/employees/3";
+const deleteURL = "http://localhost:3000/employees/4";
 
 function userDeleted(data) {
     console.log("User Deleted " + data);
@@ -34,7 +38,7 @@ function userDeleted(data) {
 makeAJAXCall("DELETE", deleteURL, userDeleted, false);
 
 const postURL = "http://localhost:3000/employees/";
-const emplData = { "name": "Anant", "salary": "900000" };
+const emplData = { "name": "Pratiskha", "salary": "400000" };
 
 function userAdded(data) {
     console.log("User Added: " + data);
